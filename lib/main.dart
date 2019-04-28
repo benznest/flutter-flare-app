@@ -1,6 +1,7 @@
 import 'package:flare_flutter/flare_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flare_flutter/flare_actor.dart';
+import 'my_house_controller.dart';
 
 void main() => runApp(MyApp());
 
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Flare on Flutter'),
     );
   }
 }
@@ -46,29 +47,56 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String _currentAnimatioName = "active";
+
+//  MyHouseController controller;
+  int room;
+
+  @override
+  void initState() {
+//    controller = MyHouseController();
+    room = 3;
+    super.initState();
+  }
+
+  update() {
+    setState(() {});
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
         appBar: AppBar(
-          // Here we take the value from the MyHomePage object that was created by
-          // the App.build method, and use it to set our appbar title.
           title: Text(widget.title),
         ),
-        body: Container(
-            child: FlareActor(
-          "assets/flare/house.flr",
-          alignment: Alignment.center,
-          fit: BoxFit.contain,
-          animation: _currentAnimatioName,
-        )) // This trailing comma makes auto-formatting nicer for build methods.
-        );
+        body: Stack(children: <Widget>[
+          FlareActor(
+            "assets/flare/house.flr",
+//            controller:controller,
+            alignment: Alignment.center,
+            fit: BoxFit.contain,
+            animation: "to $room",
+          ),
+          Positioned(top: 280,
+              left: 150,
+              child: Text("$room rooms",
+                  style: TextStyle(fontSize: 28, color: Colors.white))),
+          Positioned(top: 320,
+              left: 30,
+              right: 30,
+              child: Slider(value: room.toDouble(),
+                  divisions: 3,
+                  min: 3,
+                  max: 6,
+                  onChanged: (double value) {
+                    setState(() {
+                      room = value.toInt();
+                      print(room);
+                    });
+                  }))
+        ])
+    );
   }
 }
+
+
